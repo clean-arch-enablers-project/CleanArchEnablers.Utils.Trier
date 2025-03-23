@@ -2,8 +2,10 @@ namespace Cae.Utils.Trier.Actions;
 
 public abstract class Action<T,TO>
 {
-    public TO Execute(T input)
+    public TO Execute(T? input = default)
     {
+        if (input == null) throw new Exception();
+        
         try
         {
             return ExecuteInternalAction(input);
@@ -15,8 +17,10 @@ public abstract class Action<T,TO>
         }
     }
 
-    public Task<TO> ExecuteAsync(T input)
+    public Task<TO> ExecuteAsync(T? input = default)
     {
+        if (input == null) throw new Exception();
+        
         try
         {
             return ExecuteInternalActionAsync(input);
