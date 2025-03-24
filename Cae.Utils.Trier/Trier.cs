@@ -1,0 +1,56 @@
+using Cae.Utils.Trier.Actions.Implementations;
+
+namespace Cae.Utils.Trier;
+
+public class Trier<T,TO>
+{
+    private readonly Actions.Action<T,TO> _action;
+    private readonly T _input;
+
+    #pragma warning disable CS8618, CS8601
+    public Trier(Actions.Action<T, TO> action, T? input = default)
+    {
+        _action = action;
+
+        if (_action is not (RunnableAction or SupplierAction<TO>) 
+            && EqualityComparer<T>.Default.Equals(input, default(T)))
+        {
+            throw new Exception("Input cannot be null for this action type.");
+        }
+        
+        _input = input;
+    }
+    
+    #pragma warning restore
+    
+    public TrierBuilder<T, TO> CreateInstance(Actions.Action<T, TO> action, T? input)
+    {
+        return new TrierBuilder<T,TO>(action, input);
+    }
+
+    public TO Execute()
+    {
+        try
+        {
+            return _action.Execute(_input);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public Task<TO> ExecuteAsync()
+    {
+        try
+        {
+            return _action.ExecuteAsync(_input);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+}
