@@ -1,3 +1,3 @@
 namespace Cae.Utils.Trier.Types;
 
-public struct Void;
+public struct VoidReturn;

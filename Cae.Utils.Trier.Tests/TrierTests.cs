@@ -1,5 +1,5 @@
 using Cae.Utils.Trier.Actions.Factories;
-using Void = Cae.Utils.Trier.Types.Void;
+using VoidReturn = Cae.Utils.Trier.Types.VoidReturn;
 
 namespace Cae.Utils.Trier.Tests;
 
@@ -67,7 +67,7 @@ public class TrierTests
     public void ShouldBlockCreateTrierWithNullInputAndConsumerAction()
     {
         var action = ActionFactory.CreateInstance((int number) => {});
-        var trier = Trier<int, Void?>.CreateInstance(action, 0);
+        var trier = Trier<int, VoidReturn?>.CreateInstance(action, 0);
 
         Assert.Throws<Exception>(trier.WithUnexpectedExceptionHandler);
     }
