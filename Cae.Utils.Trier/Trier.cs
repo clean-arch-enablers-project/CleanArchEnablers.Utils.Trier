@@ -10,7 +10,7 @@ public class Trier<T,TO>
     private readonly IUnexpectedExceptionHandler _unexpectedExceptionHandler;
 
 #pragma warning disable CS8618, CS8601
-    public Trier(Actions.Action<T, TO> action, T? input = default, IUnexpectedExceptionHandler unexpectedExceptionHandler = null)
+    public Trier(Actions.Action<T, TO> action, IUnexpectedExceptionHandler unexpectedExceptionHandler, T ? input = default)
     {
         _action = action;
 
@@ -26,9 +26,9 @@ public class Trier<T,TO>
 
 #pragma warning restore
 
-    public static TrierBuilder<T, TO> CreateInstance(Actions.Action<T, TO> action, T? input, IUnexpectedExceptionHandler unexpectedExceptionHandler)
+    public static TrierBuilder<T, TO> CreateInstance(Actions.Action<T, TO> action, T? input)
     {
-        return new TrierBuilder<T,TO>(action, input, unexpectedExceptionHandler);
+        return new TrierBuilder<T,TO>(action, input);
     }
 
     public TO Execute()

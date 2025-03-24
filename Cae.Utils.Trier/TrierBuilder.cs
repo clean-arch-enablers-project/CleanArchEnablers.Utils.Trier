@@ -8,17 +8,15 @@ public class TrierBuilder<T,TO>
 {
     private readonly Actions.Action<T, TO> _action;
     private readonly T? _input;
-    private readonly IUnexpectedExceptionHandler _unexpectedExceptionHandler;
 
-    public TrierBuilder(Actions.Action<T, TO> action, T? input, IUnexpectedExceptionHandler unexpectedExceptionHandler)
+    public TrierBuilder(Actions.Action<T, TO> action, T? input)
     {
         _action = action;
         _input = input;
-        _unexpectedExceptionHandler = unexpectedExceptionHandler;
     }
 
-    public Trier<T,TO> WithUnexpectedExceptionHandler()
+    public Trier<T,TO> WithUnexpectedExceptionHandler(IUnexpectedExceptionHandler unexpectedExceptionHandler)
     {
-        return new Trier<T, TO>(_action, _input, _unexpectedExceptionHandler);
+        return new Trier<T, TO>(_action, unexpectedExceptionHandler, _input);
     }
 }
