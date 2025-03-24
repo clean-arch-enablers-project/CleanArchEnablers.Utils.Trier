@@ -20,4 +20,8 @@
         <Using Include="Xunit"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Cae.Utils.Trier\Cae.Utils.Trier.csproj" />
+    </ItemGroup>
+
 </Project>
