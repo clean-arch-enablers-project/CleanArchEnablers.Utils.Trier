@@ -1,15 +1,19 @@
 using Cae.Utils.Trier.Actions.Factories;
+using Cae.Utils.Trier.Exceptions;
+using Cae.Utils.Trier.Tests.Mocks;
 using VoidReturn = Cae.Utils.Trier.Types.VoidReturn;
 
 namespace Cae.Utils.Trier.Tests;
 
 public class TrierTests
 {
+    private readonly IUnexpectedExceptionHandler _unexpectedExceptionHandler = new UnexpectedExceptionHandlerMock();
+
     [Fact]
     public void ShouldExecuteFunctionActionSuccesfuly()
     {
         var action = ActionFactory.CreateInstance((int number) => number.ToString());
-        var result = Trier<int, string>.CreateInstance(action, 1)
+        var result = Trier<int, string>.CreateInstance(action, 1, _unexpectedExceptionHandler)
             .WithUnexpectedExceptionHandler()
             .Execute();
         
@@ -20,7 +24,7 @@ public class TrierTests
     public async Task ShouldExecuteFunctionActionSuccesfulyAsync()
     {
         var action = ActionFactory.CreateInstance((int number) => Task.FromResult(number.ToString()));
-        var trier = Trier<int, string>.CreateInstance(action, 1).WithUnexpectedExceptionHandler();
+        var trier = Trier<int, string>.CreateInstance(action, 1, _unexpectedExceptionHandler).WithUnexpectedExceptionHandler();
         var result = await trier.ExecuteAsync();
         
         Assert.Equal("1", result);
@@ -35,7 +39,7 @@ public class TrierTests
             return number.ToString();
         });
         
-        var trier = Trier<int, string>.CreateInstance(action, 1).WithUnexpectedExceptionHandler();
+        var trier = Trier<int, string>.CreateInstance(action, 1, _unexpectedExceptionHandler).WithUnexpectedExceptionHandler();
 
         Assert.Throws<Exception>(trier.Execute);
     }
@@ -49,7 +53,7 @@ public class TrierTests
             return Task.FromResult(number.ToString());
         });
         
-        var trier = Trier<int, string>.CreateInstance(action, 1).WithUnexpectedExceptionHandler();
+        var trier = Trier<int, string>.CreateInstance(action, 1, _unexpectedExceptionHandler).WithUnexpectedExceptionHandler();
 
         Assert.ThrowsAsync<Exception>(trier.ExecuteAsync);
     }
@@ -58,7 +62,7 @@ public class TrierTests
     public void ShouldBlockCreateTrierWithNullInputAndFunctionAction()
     {
         var action = ActionFactory.CreateInstance((int number) => number.ToString());
-        var trier = Trier<int, string>.CreateInstance(action, 0);
+        var trier = Trier<int, string>.CreateInstance(action, 0, _unexpectedExceptionHandler);
 
         Assert.Throws<Exception>(trier.WithUnexpectedExceptionHandler);
     }
@@ -67,7 +71,7 @@ public class TrierTests
     public void ShouldBlockCreateTrierWithNullInputAndConsumerAction()
     {
         var action = ActionFactory.CreateInstance((int number) => {});
-        var trier = Trier<int, VoidReturn?>.CreateInstance(action, 0);
+        var trier = Trier<int, VoidReturn?>.CreateInstance(action, 0, _unexpectedExceptionHandler);
 
         Assert.Throws<Exception>(trier.WithUnexpectedExceptionHandler);
     }
