@@ -23,7 +23,7 @@ public class Trier<T,TO>
     
     #pragma warning restore
     
-    public TrierBuilder<T, TO> CreateInstance(Actions.Action<T, TO> action, T? input)
+    public static TrierBuilder<T, TO> CreateInstance(Actions.Action<T, TO> action, T? input)
     {
         return new TrierBuilder<T,TO>(action, input);
     }
