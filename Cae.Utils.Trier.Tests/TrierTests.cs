@@ -78,4 +78,15 @@ public class TrierTests
 
         Assert.Throws<Exception>(() => trier.WithUnexpectedExceptionHandler(_unexpectedExceptionHandler));
     }
+
+    [Fact]
+    public void ShouldExecuteSupplierActionSuccesfuly()
+    {
+        var action = ActionFactory.CreateInstance(() => "hi");
+        var result = Trier<VoidReturn?, string>.CreateInstance(action, null)
+            .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler)
+            .Execute();
+        
+        Assert.Equal("hi", result);
+    }
 }
