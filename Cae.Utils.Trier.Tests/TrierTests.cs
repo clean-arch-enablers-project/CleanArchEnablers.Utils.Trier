@@ -10,7 +10,7 @@ public class TrierTests
     private readonly IUnexpectedExceptionHandler _unexpectedExceptionHandler = new UnexpectedExceptionHandlerMock();
 
     [Fact]
-    public void ShouldExecuteFunctionActionSuccesfuly()
+    public void ShouldExecuteFunctionActionSuccessfully()
     {
         var action = ActionFactory.CreateInstance((int number) => number.ToString());
         var result = Trier<int, string>.CreateInstance(action, 1)
@@ -21,7 +21,7 @@ public class TrierTests
     }
     
     [Fact]
-    public async Task ShouldExecuteFunctionActionSuccesfulyAsync()
+    public async Task ShouldExecuteFunctionActionSuccessfullyAsync()
     {
         var action = ActionFactory.CreateInstance((int number) => Task.FromResult(number.ToString()));
         var trier = Trier<int, string>.CreateInstance(action, 1)
@@ -80,7 +80,7 @@ public class TrierTests
     }
 
     [Fact]
-    public void ShouldExecuteSupplierActionSuccesfuly()
+    public void ShouldExecuteSupplierActionSuccessfully()
     {
         var action = ActionFactory.CreateInstance(() => "hi");
         var result = Trier<VoidReturn?, string>.CreateInstance(action, null)
