@@ -1,3 +1,4 @@
+using Cae.Utils.MappedExceptions;
 using Cae.Utils.Trier.Actions.Implementations;
 using Cae.Utils.Trier.Exceptions;
 
@@ -15,7 +16,7 @@ public class Trier<T,TO>
         _action = action;
 
         if (_action is not (RunnableAction or SupplierAction<TO>)
-            && EqualityComparer<T>.Default.Equals(input, default(T)))
+            && EqualityComparer<T>.Default.Equals(input, default))
         {
             throw new Exception("Input cannot be null for this action type.");
         }
@@ -37,6 +38,10 @@ public class Trier<T,TO>
         {
             return _action.Execute(_input);
         }
+        catch (MappedException)
+        {
+            throw;
+        }
         catch (Exception e)
         {
             throw _unexpectedExceptionHandler.Handle(e);
@@ -48,6 +53,10 @@ public class Trier<T,TO>
         try
         {
             return _action.ExecuteAsync(_input);
+        }
+        catch (MappedException)
+        {
+            throw;
         }
         catch (Exception e)
         {
