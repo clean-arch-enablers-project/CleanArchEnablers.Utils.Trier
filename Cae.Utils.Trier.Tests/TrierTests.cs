@@ -1,3 +1,5 @@
+using Cae.Utils.MappedExceptions;
+using Cae.Utils.MappedExceptions.Specifics;
 using Cae.Utils.Trier.Actions.Factories;
 using Cae.Utils.Trier.Exceptions;
 using Cae.Utils.Trier.Tests.Mocks;
@@ -43,7 +45,7 @@ public class TrierTests
         var trier = Trier<int, string>.CreateInstance(action, 1)
             .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler);
 
-        Assert.Throws<Exception>(trier.Execute);
+        Assert.Throws<InternalMappedException>(trier.Execute);
     }
     
     [Fact]
