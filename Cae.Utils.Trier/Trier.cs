@@ -4,14 +4,17 @@ using Cae.Utils.Trier.Exceptions;
 
 namespace Cae.Utils.Trier;
 
-public class Trier<T,TO>
+public class Trier<T, TO>
 {
     private readonly Actions.Action<T,TO> _action;
     private readonly T _input;
     private readonly IUnexpectedExceptionHandler _unexpectedExceptionHandler;
+    private readonly int _maxRetries;
+    private readonly List<Type> _exceptionsToRetry;
 
 #pragma warning disable CS8618, CS8601
-    public Trier(Actions.Action<T, TO> action, IUnexpectedExceptionHandler unexpectedExceptionHandler, T ? input = default)
+    public Trier(Actions.Action<T, TO> action, IUnexpectedExceptionHandler unexpectedExceptionHandler, 
+                 T? input = default, int maxRetries = 0, List<Type>? exceptionsToRetry = null)
     {
         _action = action;
 
@@ -23,44 +26,61 @@ public class Trier<T,TO>
 
         _input = input;
         _unexpectedExceptionHandler = unexpectedExceptionHandler;
+        _maxRetries = maxRetries;
+        _exceptionsToRetry = exceptionsToRetry ?? [];
     }
-
 #pragma warning restore
-
+    
     public static TrierBuilder<T, TO> CreateInstance(Actions.Action<T, TO> action, T? input)
     {
-        return new TrierBuilder<T,TO>(action, input);
+        return new TrierBuilder<T, TO>(action, input);
     }
 
     public TO Execute()
     {
-        try
+        var attempt = 0;
+
+        while (true)
         {
-            return _action.Execute(_input);
-        }
-        catch (MappedException)
-        {
-            throw;
-        }
-        catch (Exception e)
-        {
-            throw _unexpectedExceptionHandler.Handle(e);
+            try
+            {
+                return _action.Execute(_input);
+            }
+            catch (MappedException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                if (attempt >= _maxRetries || !_exceptionsToRetry.Contains(e.GetType()))
+                    
+                    throw _unexpectedExceptionHandler.Handle(e);
+                attempt++;
+            }
         }
     }
 
-    public Task<TO> ExecuteAsync()
+    public async Task<TO> ExecuteAsync()
     {
-        try
+        var attempt = 0;
+
+        while (true)
         {
-            return _action.ExecuteAsync(_input);
-        }
-        catch (MappedException)
-        {
-            throw;
-        }
-        catch (Exception e)
-        {
-            throw _unexpectedExceptionHandler.Handle(e);
+            try
+            {
+                return await _action.ExecuteAsync(_input);
+            }
+            catch (MappedException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                if (attempt >= _maxRetries || !_exceptionsToRetry.Contains(e.GetType()))
+                    throw _unexpectedExceptionHandler.Handle(e);
+                
+                attempt++;
+            }
         }
     }
 }
