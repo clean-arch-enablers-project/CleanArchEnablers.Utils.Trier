@@ -69,7 +69,7 @@ public class TrierTests
         var action = ActionFactory.CreateInstance((int number) => number.ToString());
         var trier = Trier<int, string>.CreateInstance(action, 0);
 
-        Assert.Throws<Exception>(() => trier.WithUnexpectedExceptionHandler(_unexpectedExceptionHandler));
+        Assert.Throws<MappedException>(() => trier.WithUnexpectedExceptionHandler(_unexpectedExceptionHandler));
     }
     
     [Fact]
@@ -78,7 +78,7 @@ public class TrierTests
         var action = ActionFactory.CreateInstance((int number) => {});
         var trier = Trier<int, VoidReturn?>.CreateInstance(action, 0);
 
-        Assert.Throws<Exception>(() => trier.WithUnexpectedExceptionHandler(_unexpectedExceptionHandler));
+        Assert.Throws<MappedException>(() => trier.WithUnexpectedExceptionHandler(_unexpectedExceptionHandler));
     }
 
     [Fact]
@@ -90,5 +90,68 @@ public class TrierTests
             .Execute();
         
         Assert.Equal("hi", result);
+    }
+
+    [Fact]
+    public void ShouldAutoRetryActionSuccesfully()
+    {
+        var attempt = 0;
+        var action = ActionFactory.CreateInstance((int _) =>
+        {
+            attempt++;
+
+            if (attempt <= 4) throw new NotCoolException("Cool Exception");
+            if (attempt is <= 6 and > 4) throw new CoolException("Not Cool Exception");
+
+            return "hi";
+        });
+        
+        var result = Trier<int, string>.CreateInstance(action, 1)
+            .AutoRetryOn<NotCoolException>(4)
+            .AutoRetryOn<CoolException>(2)
+            .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler)
+            .Execute();
+        
+        Assert.Equal(7, attempt);
+        Assert.Equal("hi", result);
+    }
+    
+    [Fact]
+    public void ShouldAutoRetryConsumerActionSuccessfully()
+    {
+        var attempt = 0;
+    
+        var action = ActionFactory.CreateInstance((int _) =>
+        {
+            attempt++; 
+        
+            switch (attempt)
+            {
+                case >= 1 and < 3:
+                    throw new Exception("ex");
+                case >= 3 and <= 6:
+                    throw new MappedException("ex");
+            }
+        });
+
+        var trier = Trier<int, VoidReturn?>
+            .CreateInstance(action, 1)
+            .AutoRetryOn<Exception>(3)
+            .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler);
+
+        MappedException? caughtException = null;
+    
+        try
+        {
+            trier.Execute();
+        }
+        catch (MappedException ex)
+        {
+            caughtException = ex;
+        }
+
+        Assert.NotNull(caughtException);
+        Assert.IsType<MappedException>(caughtException); 
+        Assert.Equal(3, attempt); 
     }
 }
