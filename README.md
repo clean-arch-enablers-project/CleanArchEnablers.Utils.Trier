@@ -8,7 +8,7 @@ Welcome to the repository for the open source CAE Trier library!
 ### ▶️ The NuGet Package:
 ```xml
 <ItemGroup>
-    <PackageReference Include="Cae.Utils.Trier" Version="${LatestVersion}">
+    <PackageReference Include="CleanArchEnablers.Utils.Trier" Version="${LatestVersion}">
 </ItemGroup>
 ```
 
