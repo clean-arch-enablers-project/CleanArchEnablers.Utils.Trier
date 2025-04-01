@@ -6,30 +6,28 @@ namespace Cae.Utils.Trier;
 
 public class Trier<T, TO>
 {
-    private readonly Actions.Action<T,TO> _action;
+    private readonly Actions.Action<T, TO> _action;
     private readonly T _input;
     private readonly IUnexpectedExceptionHandler _unexpectedExceptionHandler;
-    private readonly int _maxRetries;
-    private readonly List<Type> _exceptionsToRetry;
+    private readonly Dictionary<Type, int> _retryLimits;
 
-#pragma warning disable CS8618, CS8601
+    #pragma warning disable CS8618, CS8601
     public Trier(Actions.Action<T, TO> action, IUnexpectedExceptionHandler unexpectedExceptionHandler, 
-                 T? input = default, int maxRetries = 0, List<Type>? exceptionsToRetry = null)
+                 T? input = default, Dictionary<Type, int>? retryLimits = null)
     {
         _action = action;
 
         if (_action is not (RunnableAction or SupplierAction<TO>)
             && EqualityComparer<T>.Default.Equals(input, default))
         {
-            throw new Exception("Input cannot be null for this action type.");
+            throw new MappedException("Input Is Null.", "Input cannot be null for this action type.");
         }
 
         _input = input;
         _unexpectedExceptionHandler = unexpectedExceptionHandler;
-        _maxRetries = maxRetries;
-        _exceptionsToRetry = exceptionsToRetry ?? [];
+        _retryLimits = retryLimits ?? new Dictionary<Type, int>();
     }
-#pragma warning restore
+    #pragma warning restore
     
     public static TrierBuilder<T, TO> CreateInstance(Actions.Action<T, TO> action, T? input)
     {
@@ -38,8 +36,8 @@ public class Trier<T, TO>
 
     public TO Execute()
     {
-        var attempt = 0;
-
+        var attemptByException = new Dictionary<Type, int>();
+        
         while (true)
         {
             try
@@ -52,17 +50,24 @@ public class Trier<T, TO>
             }
             catch (Exception e)
             {
-                if (attempt >= _maxRetries || !_exceptionsToRetry.Contains(e.GetType()))
+                var exceptionType = e.GetType();
+
+                if (!_retryLimits.TryGetValue(exceptionType, out var maxRetries))
+                    throw _unexpectedExceptionHandler.Handle(e);
+
+                attemptByException.TryAdd(exceptionType, 0);
+
+                if (attemptByException[exceptionType] >= maxRetries) 
                     throw _unexpectedExceptionHandler.Handle(e);
                 
-                attempt++;
+                attemptByException[exceptionType]++;
             }
         }
     }
 
     public async Task<TO> ExecuteAsync()
     {
-        var attempt = 0;
+        var attemptByException = new Dictionary<Type, int>();
 
         while (true)
         {
@@ -76,10 +81,17 @@ public class Trier<T, TO>
             }
             catch (Exception e)
             {
-                if (attempt >= _maxRetries || !_exceptionsToRetry.Contains(e.GetType()))
+                var exceptionType = e.GetType();
+
+                if (!_retryLimits.TryGetValue(exceptionType, out var maxRetries))
+                    throw _unexpectedExceptionHandler.Handle(e);
+
+                attemptByException.TryAdd(exceptionType, 0);
+
+                if (attemptByException[exceptionType] >= maxRetries) 
                     throw _unexpectedExceptionHandler.Handle(e);
                 
-                attempt++;
+                attemptByException[exceptionType]++;
             }
         }
     }
