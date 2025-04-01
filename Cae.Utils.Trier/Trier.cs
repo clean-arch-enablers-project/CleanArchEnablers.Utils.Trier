@@ -53,8 +53,8 @@ public class Trier<T, TO>
             catch (Exception e)
             {
                 if (attempt >= _maxRetries || !_exceptionsToRetry.Contains(e.GetType()))
-                    
                     throw _unexpectedExceptionHandler.Handle(e);
+                
                 attempt++;
             }
         }
