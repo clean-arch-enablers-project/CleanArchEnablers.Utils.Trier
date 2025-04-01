@@ -18,10 +18,10 @@ public class TrierTests
         var result = Trier<int, string>.CreateInstance(action, 1)
             .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler)
             .Execute();
-        
+
         Assert.Equal("1", result);
     }
-    
+
     [Fact]
     public async Task ShouldExecuteFunctionActionSuccessfullyAsync()
     {
@@ -29,7 +29,7 @@ public class TrierTests
         var trier = Trier<int, string>.CreateInstance(action, 1)
             .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler);
         var result = await trier.ExecuteAsync();
-        
+
         Assert.Equal("1", result);
     }
 
@@ -41,13 +41,13 @@ public class TrierTests
             if (number == 1) throw new Exception();
             return number.ToString();
         });
-        
+
         var trier = Trier<int, string>.CreateInstance(action, 1)
             .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler);
 
         Assert.Throws<InternalMappedException>(trier.Execute);
     }
-    
+
     [Fact]
     public void ShouldExecuteFunctionActionWithErrorsAsync()
     {
@@ -56,7 +56,7 @@ public class TrierTests
             if (number == 1) throw new Exception();
             return Task.FromResult(number.ToString());
         });
-        
+
         var trier = Trier<int, string>.CreateInstance(action, 1)
             .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler);
 
@@ -71,11 +71,11 @@ public class TrierTests
 
         Assert.Throws<MappedException>(() => trier.WithUnexpectedExceptionHandler(_unexpectedExceptionHandler));
     }
-    
+
     [Fact]
     public void ShouldBlockCreateTrierWithNullInputAndConsumerAction()
     {
-        var action = ActionFactory.CreateInstance((int number) => {});
+        var action = ActionFactory.CreateInstance((int number) => { });
         var trier = Trier<int, VoidReturn?>.CreateInstance(action, 0);
 
         Assert.Throws<MappedException>(() => trier.WithUnexpectedExceptionHandler(_unexpectedExceptionHandler));
@@ -88,12 +88,12 @@ public class TrierTests
         var result = Trier<VoidReturn?, string>.CreateInstance(action, null)
             .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler)
             .Execute();
-        
+
         Assert.Equal("hi", result);
     }
 
     [Fact]
-    public void ShouldAutoRetryActionSuccesfully()
+    public void ShouldAutoRetryActionSuccessfully()
     {
         var attempt = 0;
         var action = ActionFactory.CreateInstance((int _) =>
@@ -105,26 +105,50 @@ public class TrierTests
 
             return "hi";
         });
-        
+
         var result = Trier<int, string>.CreateInstance(action, 1)
             .AutoRetryOn<NotCoolException>(4)
             .AutoRetryOn<CoolException>(2)
             .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler)
             .Execute();
-        
+
         Assert.Equal(7, attempt);
         Assert.Equal("hi", result);
     }
-    
+
+    [Fact]
+    public void ShouldAutoRetryActionWithDiferentsExceptionsSuccessfully()
+    {
+        var attempt = 0;
+        var action = ActionFactory.CreateInstance(() =>
+        {
+            attempt++;
+
+            if (attempt == 5) return "ok";
+
+            if (attempt % 2 == 0) throw new CoolException("cool");
+            else throw new NotCoolException("not cool");
+        });
+
+        var result = Trier<VoidReturn?, string>.CreateInstance(action, null)
+            .AutoRetryOn<NotCoolException>(4)
+            .AutoRetryOn<CoolException>(2)
+            .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler)
+            .Execute();
+
+        Assert.Equal(5, attempt);
+        Assert.Equal("ok", result);
+    }
+
     [Fact]
     public void ShouldAutoRetryConsumerActionSuccessfully()
     {
         var attempt = 0;
-    
+
         var action = ActionFactory.CreateInstance((int _) =>
         {
-            attempt++; 
-        
+            attempt++;
+
             switch (attempt)
             {
                 case >= 1 and < 3:
@@ -140,7 +164,7 @@ public class TrierTests
             .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler);
 
         MappedException? caughtException = null;
-    
+
         try
         {
             trier.Execute();
@@ -151,7 +175,7 @@ public class TrierTests
         }
 
         Assert.NotNull(caughtException);
-        Assert.IsType<MappedException>(caughtException); 
-        Assert.Equal(3, attempt); 
+        Assert.IsType<MappedException>(caughtException);
+        Assert.Equal(3, attempt);
     }
 }
