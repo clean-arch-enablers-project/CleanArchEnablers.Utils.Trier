@@ -1,15 +1,13 @@
-
-
+using Cae.Utils.Trier;
 using Cae.Utils.Trier.Exceptions;
+using Actions = Cae.Utils.Trier.Actions;
 
-namespace Cae.Utils.Trier;
-
-public class TrierBuilder<T,TO>
+public class TrierBuilder<T, TO>
 {
     private readonly Actions.Action<T, TO> _action;
     private readonly T? _input;
 
-    private List<Exception> ExceptionsToRetry { get; set; } = []; 
+    private List<Type> ExceptionsToRetry { get; set; } = [];
     private int MaxAmountOfRetries { get; set; } = 0;
 
     public TrierBuilder(Actions.Action<T, TO> action, T? input)
@@ -18,16 +16,16 @@ public class TrierBuilder<T,TO>
         _input = input;
     }
 
-    public TrierBuilder<T, TO> AutoRetryOn<TE>(int maxAmountOfRetries) where TE : Exception, new()
+    public TrierBuilder<T, TO> AutoRetryOn<TE>(int maxAmountOfRetries) where TE : Exception
     {
         MaxAmountOfRetries = maxAmountOfRetries;
-        ExceptionsToRetry.Add(new TE());
-        
+        ExceptionsToRetry.Add(typeof(TE));
+
         return this;
     }
 
-    public Trier<T,TO> WithUnexpectedExceptionHandler(IUnexpectedExceptionHandler unexpectedExceptionHandler)
+    public Trier<T, TO> WithUnexpectedExceptionHandler(IUnexpectedExceptionHandler unexpectedExceptionHandler)
     {
-        return new Trier<T, TO>(_action, unexpectedExceptionHandler, _input);
+        return new Trier<T, TO>(_action, unexpectedExceptionHandler, _input, MaxAmountOfRetries, ExceptionsToRetry);
     }
 }
