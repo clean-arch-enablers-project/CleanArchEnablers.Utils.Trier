@@ -4,6 +4,12 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>CleanArchEnablers.Utils.Trier</Title>
+        <Authors>Gabriel Araújo Lima, José Lúcio Júnior</Authors>
+        <Description>The official CAE Trier library to Microsoft .NET</Description>
+        <RepositoryUrl>https://github.com/clean-arch-enablers-project/CleanArchEnablers.Utils.Trier</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
     </PropertyGroup>
 
     <ItemGroup>
