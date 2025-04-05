@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Cae.Utils.MappedExceptions;
 using Cae.Utils.MappedExceptions.Specifics;
-using Cae.Utils.Trier.Exceptions;
+using CleanArchEnablers.Utils.Trier.Exceptions;
 
-namespace Cae.Utils.Trier.Tests.Mocks
+namespace CleanArchEnablers.Utils.Trier.Tests.Mocks
 {
     internal class UnexpectedExceptionHandlerMock : IUnexpectedExceptionHandler
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cae.Utils.MappedExceptions;
 
-namespace Cae.Utils.Trier.Exceptions
+namespace CleanArchEnablers.Utils.Trier.Exceptions
 {
     public interface IUnexpectedExceptionHandler
     {

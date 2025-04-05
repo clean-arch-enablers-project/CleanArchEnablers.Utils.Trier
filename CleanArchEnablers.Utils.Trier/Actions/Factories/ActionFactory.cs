@@ -1,7 +1,8 @@
-using Cae.Utils.Trier.Actions.Implementations;
-using VoidReturn = Cae.Utils.Trier.Types.VoidReturn;
+using CleanArchEnablers.Utils.Trier.Actions.Implementations;
+using Types_VoidReturn = CleanArchEnablers.Utils.Trier.Types.VoidReturn;
+using VoidReturn = CleanArchEnablers.Utils.Trier.Types.VoidReturn;
 
-namespace Cae.Utils.Trier.Actions.Factories;
+namespace CleanArchEnablers.Utils.Trier.Actions.Factories;
 
 public static class ActionFactory
 {
@@ -21,12 +22,12 @@ public static class ActionFactory
 
     #region ConsumerActionFactory
 
-    public static Action<T, VoidReturn?> CreateInstance<T>(Action<T> consumer)
+    public static Action<T, Types_VoidReturn?> CreateInstance<T>(Action<T> consumer)
     {
         return new ConsumerAction<T>(consumer);
     }
 
-    public static Action<T, VoidReturn?> CreateInstance<T>(Func<T, Task> consumerAsync)
+    public static Action<T, Types_VoidReturn?> CreateInstance<T>(Func<T, Task> consumerAsync)
     {
         return new ConsumerAction<T>(consumerAsync);
     }
@@ -35,12 +36,12 @@ public static class ActionFactory
 
     #region RunnableActionFactory
 
-    public static Action<VoidReturn?, VoidReturn?> CreateInstance(Action action)
+    public static Action<Types_VoidReturn?, Types_VoidReturn?> CreateInstance(Action action)
     {
         return new RunnableAction(action);
     }
     
-    public static Action<VoidReturn?, VoidReturn?> CreateInstance(Func<Task> action)
+    public static Action<Types_VoidReturn?, Types_VoidReturn?> CreateInstance(Func<Task> action)
     {
         return new RunnableAction(action);
     }
@@ -49,12 +50,12 @@ public static class ActionFactory
 
     #region SupplierActionFactory
 
-    public static Action<VoidReturn?, TO> CreateInstance<TO>(Func<TO> action)
+    public static Action<Types_VoidReturn?, TO> CreateInstance<TO>(Func<TO> action)
     {
         return new SupplierAction<TO>(action);
     }
 
-    public static Action<VoidReturn?, TO> CreateInstance<TO>(Func<Task<TO>> action)
+    public static Action<Types_VoidReturn?, TO> CreateInstance<TO>(Func<Task<TO>> action)
     {
         return new SupplierAction<TO>(action);
     }

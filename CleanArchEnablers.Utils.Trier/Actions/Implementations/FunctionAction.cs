@@ -1,4 +1,4 @@
-namespace Cae.Utils.Trier.Actions.Implementations;
+namespace CleanArchEnablers.Utils.Trier.Actions.Implementations;
 
 public class FunctionAction<T, TO> : Action<T, TO>
 {

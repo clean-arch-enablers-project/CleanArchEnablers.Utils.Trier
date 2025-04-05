@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cae.Utils.Trier", "Cae.Utils.Trier\Cae.Utils.Trier.csproj", "{F1603AC6-6BAC-44D3-965D-B1C93554104B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchEnablers.Utils.Trier", "CleanArchEnablers.Utils.Trier\CleanArchEnablers.Utils.Trier.csproj", "{F1603AC6-6BAC-44D3-965D-B1C93554104B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cae.Utils.Trier.Tests", "Cae.Utils.Trier.Tests\Cae.Utils.Trier.Tests.csproj", "{98D1EC2B-5CF0-46AC-9EC7-D3B10D7F9D9B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchEnablers.Utils.Trier.Tests", "CleanArchEnablers.Utils.Trier.Tests\CleanArchEnablers.Utils.Trier.Tests.csproj", "{98D1EC2B-5CF0-46AC-9EC7-D3B10D7F9D9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

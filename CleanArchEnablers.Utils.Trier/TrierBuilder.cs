@@ -1,8 +1,8 @@
-using Cae.Utils.Trier;
-using Cae.Utils.Trier.Exceptions;
-using Actions = Cae.Utils.Trier.Actions;
+using CleanArchEnablers.Utils.Trier;
+using CleanArchEnablers.Utils.Trier.Exceptions;
+using Actions = CleanArchEnablers.Utils.Trier.Actions;
 
-namespace Cae.Utils.Trier;
+namespace CleanArchEnablers.Utils.Trier;
 
 public class TrierBuilder<T, TO>
 {

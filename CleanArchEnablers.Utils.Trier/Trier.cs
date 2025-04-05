@@ -1,8 +1,8 @@
 using Cae.Utils.MappedExceptions;
-using Cae.Utils.Trier.Actions.Implementations;
-using Cae.Utils.Trier.Exceptions;
+using CleanArchEnablers.Utils.Trier.Actions.Implementations;
+using CleanArchEnablers.Utils.Trier.Exceptions;
 
-namespace Cae.Utils.Trier;
+namespace CleanArchEnablers.Utils.Trier;
 
 public class Trier<T, TO>
 {

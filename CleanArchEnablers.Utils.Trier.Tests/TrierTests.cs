@@ -1,11 +1,11 @@
 using Cae.Utils.MappedExceptions;
 using Cae.Utils.MappedExceptions.Specifics;
-using Cae.Utils.Trier.Actions.Factories;
-using Cae.Utils.Trier.Exceptions;
-using Cae.Utils.Trier.Tests.Mocks;
-using VoidReturn = Cae.Utils.Trier.Types.VoidReturn;
+using CleanArchEnablers.Utils.Trier.Actions.Factories;
+using CleanArchEnablers.Utils.Trier.Exceptions;
+using CleanArchEnablers.Utils.Trier.Tests.Mocks;
+using CleanArchEnablers.Utils.Trier.Types;
 
-namespace Cae.Utils.Trier.Tests;
+namespace CleanArchEnablers.Utils.Trier.Tests;
 
 public class TrierTests
 {

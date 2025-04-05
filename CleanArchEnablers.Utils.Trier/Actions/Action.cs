@@ -1,4 +1,4 @@
-namespace Cae.Utils.Trier.Actions;
+namespace CleanArchEnablers.Utils.Trier.Actions;
 
 public abstract class Action<T, TO>
 {
