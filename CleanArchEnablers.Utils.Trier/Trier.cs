@@ -1,6 +1,6 @@
 using Cae.Utils.MappedExceptions;
 using CleanArchEnablers.Utils.Trier.Actions.Implementations;
-using CleanArchEnablers.Utils.Trier.Exceptions;
+using CleanArchEnablers.Utils.Trier.Exceptions.Handlers;
 
 namespace CleanArchEnablers.Utils.Trier;
 

@@ -1,7 +1,7 @@
 using Cae.Utils.MappedExceptions;
 using Cae.Utils.MappedExceptions.Specifics;
 using CleanArchEnablers.Utils.Trier.Actions.Factories;
-using CleanArchEnablers.Utils.Trier.Exceptions;
+using CleanArchEnablers.Utils.Trier.Exceptions.Handlers;
 using CleanArchEnablers.Utils.Trier.Tests.Mocks;
 using CleanArchEnablers.Utils.Trier.Types;
 
