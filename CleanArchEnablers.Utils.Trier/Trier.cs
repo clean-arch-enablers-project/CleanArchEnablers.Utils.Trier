@@ -30,11 +30,22 @@ public class Trier<T, TO>
     }
     #pragma warning restore
     
+    /// <summary>
+    /// Initialize Trier Builder
+    /// </summary>
+    /// <param name="action">Your function</param>
+    /// <param name="input">The parameter of your function</param>
+    /// <returns>Trier Builder</returns>
     public static TrierBuilder<T, TO> CreateInstance(Actions.Action<T, TO> action, T? input)
     {
         return new TrierBuilder<T, TO>(action, input);
     }
 
+    /// <summary>
+    /// Execute Non-Async Actions defined in builder
+    /// </summary>
+    /// <returns>Provided type</returns>
+    /// <exception cref="MappedException">Exception defined on your action</exception>
     public TO Execute()
     {
         var attemptByException = new Dictionary<Type, int>();
@@ -66,6 +77,11 @@ public class Trier<T, TO>
         }
     }
 
+    /// <summary>
+    /// Execute Async Actions defined in builder
+    /// </summary>
+    /// <returns>Provided type</returns>
+    /// <exception cref="MappedException">Exception defined on your action</exception>
     public async Task<TO> ExecuteAsync()
     {
         var attemptByException = new Dictionary<Type, int>();

@@ -4,7 +4,11 @@ namespace CleanArchEnablers.Utils.Trier.Exceptions.Handlers
 {
     public interface IUnexpectedExceptionHandler
     {
-        // TODO: Implement MappedException on return instead of a Generic Exception
+        /// <summary>
+        /// Transform normal Exceptions in MappedExceptions
+        /// </summary>
+        /// <param name="exception">Generic Exception</param>
+        /// <returns>Mapped Exception</returns>
         MappedException Handle(Exception exception);
     }
 }
