@@ -1,5 +1,6 @@
 using Cae.Utils.MappedExceptions;
 using CleanArchEnablers.Utils.Trier.Actions.Implementations;
+using CleanArchEnablers.Utils.Trier.Exceptions;
 using CleanArchEnablers.Utils.Trier.Exceptions.Handlers;
 
 namespace CleanArchEnablers.Utils.Trier;
@@ -20,7 +21,7 @@ public class Trier<T, TO>
         if (_action is not (RunnableAction or SupplierAction<TO>)
             && EqualityComparer<T>.Default.Equals(input, default))
         {
-            throw new MappedException("Input Is Null.", "Input cannot be null for this action type.");
+            throw new InvalidInputForThisActionTypeMappedException();
         }
 
         _input = input;
