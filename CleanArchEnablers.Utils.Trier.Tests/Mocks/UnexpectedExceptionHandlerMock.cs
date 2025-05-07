@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cae.Utils.MappedExceptions;
 using Cae.Utils.MappedExceptions.Specifics;
-using CleanArchEnablers.Utils.Trier.Exceptions;
+using CleanArchEnablers.Utils.Trier.Exceptions.Handlers;
 
 namespace CleanArchEnablers.Utils.Trier.Tests.Mocks
 {

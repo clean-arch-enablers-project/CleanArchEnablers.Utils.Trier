@@ -1,7 +1,7 @@
 using Cae.Utils.MappedExceptions;
 using Cae.Utils.MappedExceptions.Specifics;
 using CleanArchEnablers.Utils.Trier.Actions.Factories;
-using CleanArchEnablers.Utils.Trier.Exceptions;
+using CleanArchEnablers.Utils.Trier.Exceptions.Handlers;
 using CleanArchEnablers.Utils.Trier.Tests.Mocks;
 using CleanArchEnablers.Utils.Trier.Types;
 
@@ -76,7 +76,7 @@ public class TrierTests
     public void ShouldBlockCreateTrierWithNullInputAndConsumerAction()
     {
         var action = ActionFactory.CreateInstance((int number) => { });
-        var trier = Trier<int, VoidReturn?>.CreateInstance(action, 0);
+        var trier = Trier<int, VoidType?>.CreateInstance(action, 0);
 
         Assert.Throws<MappedException>(() => trier.WithUnexpectedExceptionHandler(_unexpectedExceptionHandler));
     }
@@ -85,7 +85,7 @@ public class TrierTests
     public void ShouldExecuteSupplierActionSuccessfully()
     {
         var action = ActionFactory.CreateInstance(() => "hi");
-        var result = Trier<VoidReturn?, string>.CreateInstance(action, null)
+        var result = Trier<VoidType?, string>.CreateInstance(action, null)
             .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler)
             .Execute();
 
@@ -130,7 +130,7 @@ public class TrierTests
             else throw new NotCoolException("not cool");
         });
 
-        var result = Trier<VoidReturn?, string>.CreateInstance(action, null)
+        var result = Trier<VoidType?, string>.CreateInstance(action, null)
             .AutoRetryOn<NotCoolException>(4)
             .AutoRetryOn<CoolException>(2)
             .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler)
@@ -158,7 +158,7 @@ public class TrierTests
             }
         });
 
-        var trier = Trier<int, VoidReturn?>
+        var trier = Trier<int, VoidType?>
             .CreateInstance(action, 1)
             .AutoRetryOn<Exception>(3)
             .WithUnexpectedExceptionHandler(_unexpectedExceptionHandler);
