@@ -10,6 +10,7 @@
         <Description>The official CAE Trier library to Microsoft .NET</Description>
         <RepositoryUrl>https://github.com/clean-arch-enablers-project/CleanArchEnablers.Utils.Trier</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
+        <Version>1.0.1</Version>
     </PropertyGroup>
 
     <ItemGroup>
